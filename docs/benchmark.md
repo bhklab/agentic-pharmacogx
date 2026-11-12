@@ -65,13 +65,15 @@ An answer is correct if it matches the manual answer in **data, endpoint, method
 
 ## Questions
 
-| Tier | Type | Questions |
-|---|---|---|
-| 1 | Data retrieval | Q001–Q020 (20) |
-| 2 | One PharmacoGx function | Q021–Q050 (30) |
-| 3 | Multi-step analysis | Q051–Q100 (50) |
+The 100 questions get harder in three tiers:
+
+- **Tier 1 – Data retrieval** (Q001–Q020): find cell lines, drugs and measurements.
+- **Tier 2 – One PharmacoGx function** (Q021–Q050): pick and run the right function.
+- **Tier 3 – Multi-step analysis** (Q051–Q100): combine several functions to answer a question.
 
 ## Datasets
+
+The 12 PSets are downloaded from ORCESTRA. The table shows the version used and how many questions use each one.
 
 | PSet | ORCESTRA name | Questions |
 |---|---|---|
