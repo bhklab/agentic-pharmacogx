@@ -16,7 +16,9 @@ pkill -u $USER -f agent_example
 pkill -u $USER -f "ollama serve"
 
 # 2. start Ollama with more memory (qwen3:8b max = 40960)
-OLLAMA_CONTEXT_LENGTH=40960 nohup pixi run ollama serve > logs/ollama.out 2>&1 &
+#    use the server's own Ollama (/usr/local/bin/ollama, it can use the GPU); pixi's Ollama has no GPU support
+if [ -x /usr/local/bin/ollama ]; then OLLAMA="/usr/local/bin/ollama"; else OLLAMA="pixi run ollama"; fi
+OLLAMA_CONTEXT_LENGTH=40960 nohup $OLLAMA serve > logs/ollama.out 2>&1 &
 
 # 3. wait for Ollama, then run the question (downloads the model the first time)
 sleep 10
