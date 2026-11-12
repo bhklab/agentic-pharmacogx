@@ -7,10 +7,11 @@
 # Replace Q014 with any question ID (Q001-Q100).
 #
 # Next step, once this works: all questions (agent.py)
-#   pixi run agent-run                     without skills
-#   pixi run agent-run --skills            with all skills in skills/
+#   pixi run agent                         without skills
+#   pixi run agent --skills                with all skills in skills/
 #
-# Needs: Ollama running. The agent downloads the PSets it needs from ORCESTRA itself.
+# Needs: nothing extra. Ollama is started and the model downloaded automatically if needed.
+#        The agent downloads the PSets it needs from ORCESTRA itself.
 # Saves:
 #   data/results/benchmark/agent/example/Q014_<model>.txt   the answer (+ "_skills" if used)
 #   logs/benchmark/example/Q014_<model>.log                 the agent's thinking: every step, code and output
