@@ -15,6 +15,7 @@
 # Saves:
 #   data/results/benchmark/agent/example/Q014_<model>.txt   the answer (+ "_skills" if used)
 #   logs/benchmark/example/Q014_<model>.log                 the agent's thinking: every step, code and output
+#                                                           (written live; last line says how the run ended)
 
 import csv
 import datetime
@@ -24,6 +25,8 @@ from pathlib import Path
 
 from biomni.agent import A1
 from biomni.config import default_config
+from ollama_fix import fix_agent   # fixes empty replies + small context, see ollama_fix.py
+from live_log import run_with_live_log   # writes each step to the log right away
 
 
 # Step 1: read the question ID (e.g. Q014) and check if --skills was added
@@ -92,14 +95,10 @@ if model not in models_in_ollama:
     ollama.pull(model)
 
 agent = A1(path="./data", llm=model, source="Ollama", expected_data_lake_files=[])
+agent = fix_agent(agent, model)
 
 
-# Step 6: ask the agent Q014
-# steps = what it did on the way (thinking, code, outputs), answer = its final reply
-steps, answer = agent.go(prompt)
-
-
-# Step 7: save the answer and the log
+# Step 6: names and header for the saved files
 # file name = question + model (+ skills), e.g. Q014_qwen3-8b_skills
 name = qid + "_" + model.replace(":", "-") + ("_skills" if use_skills else "")
 
@@ -110,16 +109,18 @@ header = (
     + "SKILLS: " + (", ".join(str(f) for f in skill_files) if use_skills else "none") + "\n"
     + "DATE: " + datetime.datetime.now().isoformat(timespec="seconds") + "\n"
 )
+log_file = Path("logs/benchmark/example") / (name + ".log")
+print("Log (written live, step by step):", log_file)
 
-# the answer -> data/results/
+
+# Step 7: ask the agent Q014; every step goes into the log right away
+answer = run_with_live_log(agent, prompt, log_file, header)
+
+
+# Step 8: save the answer -> data/results/
 result_folder = Path("data/results/benchmark/agent/example")
 result_folder.mkdir(parents=True, exist_ok=True)
 (result_folder / (name + ".txt")).write_text(header + "\nPROMPT:\n" + prompt + "\n\nANSWER:\n" + str(answer))
 
-# the agent's thinking -> logs/
-log_folder = Path("logs/benchmark/example")
-log_folder.mkdir(parents=True, exist_ok=True)
-(log_folder / (name + ".log")).write_text(header + "\nSTEPS:\n\n" + "\n\n".join(map(str, steps)))
-
 print("Answer saved:", result_folder / (name + ".txt"))
-print("Log saved:   ", log_folder / (name + ".log"))
+print("Log saved:   ", log_file)
