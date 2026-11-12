@@ -4,18 +4,11 @@
 
 **Contact:** [nasim.bondarsahebi@uhn.ca](mailto:nasim.bondarsahebi@uhn.ca)
 
-**Description:** Model-agnostic agent framework for reproducible pharmacogenomic analysis with PharmacoGx.
-
 ## Overview
 
-Agentic PharmacoGx aims to enable AI agents to perform reproducible pharmacogenomic
-analyses through natural language. By connecting language-model agents to curated
-datasets and validated computational methods, the framework is designed to ensure that
-analytical results are computed, not inferred.
+Agentic PharmacoGx is a model-agnostic framework for reproducible pharmacogenomic analysis through natural-language queries.
 
-The project builds on [PharmacoGx](https://bioconductor.org/packages/PharmacoGx), a
-Bioconductor R package for the analysis of large-scale pharmacogenomic data, and on
-curated PharmacoSets available through [ORCESTRA](https://orcestra.ca).
+Integrating [PharmacoGx](https://bioconductor.org/packages/PharmacoGx) and curated datasets from [ORCESTRA](https://orcestra.ca), the framework enables AI agents to execute established computational methods through reusable skills and tools, ensuring results are computed rather than inferred by language models.
 
 --------------------------------------
 
