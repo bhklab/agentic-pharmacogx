@@ -20,7 +20,6 @@ from pathlib import Path
 import ollama
 from biomni.agent import A1
 from biomni.config import default_config
-from ollama_fix import fix_agent   # fixes empty replies + small context, see ollama_fix.py
 from live_log import run_with_live_log   # writes each step to the log right away
 
 # settings
@@ -62,7 +61,7 @@ for q in questions:
 
     # every step goes into logs/<run>/Q001.log right away; errors are noted there and we go on
     try:
-        agent = fix_agent(A1(path="./data", llm=model, source="Ollama", expected_data_lake_files=[]), model)
+        agent = A1(path="./data", llm=model, source="Ollama", expected_data_lake_files=[])
         answer = run_with_live_log(agent, prompt, logs / f"{qid}.log", f"{qid}: {q['question']}\n")
     except Exception as error:   # e.g. the agent could not even start
         answer = f"ERROR: {error}"
