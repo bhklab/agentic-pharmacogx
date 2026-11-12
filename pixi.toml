@@ -24,7 +24,7 @@ env.RAWDATA = "${PIXI_PROJECT_ROOT}/data/rawdata"
 env.PROCDATA = "${PIXI_PROJECT_ROOT}/data/procdata"
 env.RESULTS = "${PIXI_PROJECT_ROOT}/data/results"
 env.SCRIPTS = "${PIXI_PROJECT_ROOT}/workflow/scripts"
-env.AGENT_MODEL = "qwen3:8b"   # Ollama model used by the agent scripts
+env.AGENT_MODEL = "qwen3:8b"   # Ollama model used by the agent 
 
 [dependencies]
 python = "3.12.*"   # pinned: pandas 2.3.3 (needed by Biomni) has no build for Python 3.15
@@ -32,7 +32,7 @@ ipython = "*"
 ipykernel = "*"
 jupyterlab = "*"
 pip = "*"
-ollama = "*"        # runs the local language model for the agent (pixi run ollama serve)
+ollama = "*"       
 
 [pypi-dependencies]
 damply = ">=0.10.0, <0.11"
