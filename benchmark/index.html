@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="author" content="Nasim BondarSahebi" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Benchmark - Agentic PharmacoGX</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Benchmark";
+        var mkdocs_page_input_path = "benchmark.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Agentic PharmacoGX
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../usage/">Usage</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../data_sources/">Data Sources</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Benchmark</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#how-it-works">How it works</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#files">Files</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#design">Design</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#runs">Runs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scoring">Scoring</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#questions">Questions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#datasets">Datasets</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../agent_setup/">Agent Setup</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../devnotes/">Developer Notes</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Agentic PharmacoGX</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Benchmark</li>
+    <li class="wy-breadcrumbs-aside">
+          <a href="https://github.com/bhklab/agentic-pharmacogx/edit/master/docs/benchmark.md">Edit on agentic-pharmacogx</a>
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="benchmark">Benchmark</h1>
+<p>Can an agent answer pharmacogenomic questions as well as an expert using PharmacoGx?</p>
+<p>We answer 100 questions twice, once <strong>manually</strong> with PharmacoGx (the reference) and once by the <strong>agent</strong>, and measure how often the answers agree.</p>
+<pre><code>              100 questions  +  12 PSets
+                         │
+           ┌─────────────┴─────────────┐
+           ▼                           ▼
+        MANUAL                       AGENT
+   PharmacoGx code in R       question in plain English
+           │                           │
+           └─────────────┬─────────────┘
+                         ▼
+                      COMPARE
+                   % agreement
+</code></pre>
+<h2 id="how-it-works">How it works</h2>
+<ol>
+<li><strong>Manual answers:</strong> answer each question with PharmacoGx, using the PSet versions listed below. This is done once.</li>
+<li><strong>Agent answers:</strong> send each question to the agent in a new session. The agent finds and downloads the data it needs from ORCESTRA itself. Repeat as often as needed.</li>
+<li><strong>Compare:</strong> score each agent run against the manual answers.</li>
+</ol>
+<h2 id="files">Files</h2>
+<pre><code>metadata/
+├── benchmark_questions.csv            the 100 questions
+└── benchmark_prompt_template.txt      prompt sent to the agent
+
+workflow/
+├── scripts/benchmark/
+│   ├── manual.R                       manual answers
+│   └── agent.py                       agent answers (see Agent setup)
+└── notebooks/benchmark/
+    └── compare.Rmd                    comparison and figures
+
+data/                                  not in git
+├── procdata/psets/                    PSets downloaded from ORCESTRA
+└── results/benchmark/                 all results
+</code></pre>
+<h2 id="design">Design</h2>
+<ul>
+<li><strong>Agent gets its own data:</strong> the agent finds and downloads PSets from ORCESTRA itself; finding the right dataset is part of the task.</li>
+<li><strong>PharmacoGx only:</strong> the manual answers use PharmacoGx functions, not custom code.</li>
+<li><strong>Blind:</strong> the agent never sees the manual answers.</li>
+<li><strong>Independent:</strong> each question runs in a new agent session.</li>
+<li><strong>Same format:</strong> both sides answer as <code>qid | answer | method</code>.</li>
+</ul>
+<h2 id="runs">Runs</h2>
+<p>A <strong>run</strong> is the agent answering all 100 questions once. Each run is saved in its own folder, with its settings (agent, model, parameters) recorded automatically. Runs can be added at any time:</p>
+<ul>
+<li><strong>repeat a run</strong> to test reproducibility;</li>
+<li><strong>change the model or agent</strong> to test an improvement.</li>
+</ul>
+<h2 id="scoring">Scoring</h2>
+<p>An answer is correct if it matches the manual answer in <strong>data, endpoint, method and result</strong> (within tolerance). We report % agreement per tier and overall, with 95% confidence intervals, and how consistent the results are across runs.</p>
+<h2 id="questions">Questions</h2>
+<p>The 100 questions get harder in three tiers:</p>
+<ul>
+<li><strong>Tier 1 – Data retrieval</strong> (Q001–Q020): find cell lines, drugs and measurements.</li>
+<li><strong>Tier 2 – One PharmacoGx function</strong> (Q021–Q050): pick and run the right function.</li>
+<li><strong>Tier 3 – Multi-step analysis</strong> (Q051–Q100): combine several functions to answer a question.</li>
+</ul>
+<h2 id="datasets">Datasets</h2>
+<p>The questions use 12 PSets from ORCESTRA. The table shows the version used for the manual answers and how many questions use each one.</p>
+<table>
+<thead>
+<tr>
+<th>PSet</th>
+<th>ORCESTRA name</th>
+<th>Questions</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CCLE</td>
+<td><code>CCLE_2015</code></td>
+<td>29</td>
+</tr>
+<tr>
+<td>CTRPv2</td>
+<td><code>CTRPv2_2015</code></td>
+<td>18</td>
+</tr>
+<tr>
+<td>GDSC2</td>
+<td><code>GDSC_2020(v2-8.2)</code></td>
+<td>15</td>
+</tr>
+<tr>
+<td>gCSI</td>
+<td><code>gCSI_2019</code></td>
+<td>8</td>
+</tr>
+<tr>
+<td>NCI_ALMANAC</td>
+<td><code>NCI_ALMANAC</code></td>
+<td>8</td>
+</tr>
+<tr>
+<td>GDSC2_matrix</td>
+<td><code>GDSC²_Matrix</code></td>
+<td>7</td>
+</tr>
+<tr>
+<td>NCI60</td>
+<td><code>NCI60_2021</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td>HMCL</td>
+<td><code>HMCL</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td>PRISM</td>
+<td><code>PRISM_2020</code></td>
+<td>3</td>
+</tr>
+<tr>
+<td>GDSC-SQUARE Anchor</td>
+<td><code>GDSC²_Anchor</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>GRAY</td>
+<td><code>GRAY_2017</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td>GDSC1</td>
+<td><code>GDSC_2020(v1-8.2)</code></td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>A further 21 questions use all 12 PSets.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../data_sources/" class="btn btn-neutral float-left" title="Data Sources"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../agent_setup/" class="btn btn-neutral float-right" title="Agent Setup">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/bhklab/agentic-pharmacogx" class="fa fa-code-fork" style="color: #fcfcfc"> agentic-pharmacogx</a>
+        </span>
+    
+    
+      <span><a href="../data_sources/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../agent_setup/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
