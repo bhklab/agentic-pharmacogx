@@ -24,6 +24,7 @@ env.RAWDATA = "${PIXI_PROJECT_ROOT}/data/rawdata"
 env.PROCDATA = "${PIXI_PROJECT_ROOT}/data/procdata"
 env.RESULTS = "${PIXI_PROJECT_ROOT}/data/results"
 env.SCRIPTS = "${PIXI_PROJECT_ROOT}/workflow/scripts"
+env.AGENT_MODEL = "qwen3:8b"   # Ollama model used by the agent scripts
 
 [dependencies]
 python = "3.12.*"   # pinned: pandas 2.3.3 (needed by Biomni) has no build for Python 3.15
@@ -31,6 +32,7 @@ ipython = "*"
 ipykernel = "*"
 jupyterlab = "*"
 pip = "*"
+ollama = "*"        # runs the local language model for the agent (pixi run ollama serve)
 
 [pypi-dependencies]
 damply = ">=0.10.0, <0.11"
@@ -52,8 +54,8 @@ r-ggplot2 = "*"
 
 [tasks]
 example_script = {cmd="python $SCRIPTS/example_script.py", description="Run an example script"}
-agent-example = { cmd = "python workflow/scripts/benchmark/agent_example.py", description = "Send one benchmark question to the agent (default Q013)" }
-agent-run = { cmd = "python workflow/scripts/benchmark/agent.py", description = "Send all benchmark questions to the agent: add --run run01" }
+agent-example = { cmd = "python workflow/scripts/benchmark/agent_example.py", description = "Send one question to the agent, e.g. pixi run agent-example Q014 --skills" }
+agent-run = { cmd = "python workflow/scripts/benchmark/agent.py", description = "Send all questions to the agent (new run folder each time), e.g. pixi run agent-run --skills" }
 
 ############################################## QUALITY ###############################################
 # Quality includes linting, type checking, and formatting
