@@ -20,10 +20,9 @@ We answer 100 questions twice, once **manually** with PharmacoGx (the reference)
 
 ## How it works
 
-1. **Get the data:** download the 12 PSets from ORCESTRA.
-2. **Manual answers:** answer each question with PharmacoGx. This is done once.
-3. **Agent answers:** send each question to the agent in a new session. Repeat as often as needed.
-4. **Compare:** score each agent run against the manual answers.
+1. **Manual answers:** answer each question with PharmacoGx, using the PSet versions listed below. This is done once.
+2. **Agent answers:** send each question to the agent in a new session. The agent finds and downloads the data it needs from ORCESTRA itself. Repeat as often as needed.
+3. **Compare:** score each agent run against the manual answers.
 
 ## Files
 
@@ -40,13 +39,13 @@ workflow/
     └── compare.Rmd                    comparison and figures
 
 data/                                  not in git
-├── procdata/psets/                    the 12 PSets
+├── procdata/psets/                    PSets downloaded from ORCESTRA
 └── results/benchmark/                 all results
 ```
 
 ## Design
 
-- **Same data:** both sides use the same PSet files.
+- **Agent gets its own data:** the agent finds and downloads PSets from ORCESTRA itself; finding the right dataset is part of the task.
 - **PharmacoGx only:** the manual answers use PharmacoGx functions, not custom code.
 - **Blind:** the agent never sees the manual answers.
 - **Independent:** each question runs in a new agent session.
@@ -73,7 +72,7 @@ The 100 questions get harder in three tiers:
 
 ## Datasets
 
-The 12 PSets are downloaded from ORCESTRA. The table shows the version used and how many questions use each one.
+The questions use 12 PSets from ORCESTRA. The table shows the version used for the manual answers and how many questions use each one.
 
 | PSet | ORCESTRA name | Questions |
 |---|---|---|
