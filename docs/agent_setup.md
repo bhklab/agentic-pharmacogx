@@ -20,10 +20,10 @@ pixi install
 ## Run
 
 ```bash
-pixi run agent-example Q014              # one question
+pixi run agent-example Q014              # one question (test)
 pixi run agent-example Q014 --skills     # one question, with our skills
-pixi run agent-run                       # all questions
-pixi run agent-run --skills              # all questions, with our skills
+pixi run agent                           # all questions
+pixi run agent --skills                  # all questions, with our skills
 ```
 
 Replace `Q014` with any question ID (Q001–Q100). To see the prompt without running the agent, add `--dry-run`.
@@ -36,4 +36,4 @@ Answers are saved in `data/results/benchmark/agent/` and the agent's step-by-ste
 
 - **Skills** are in `skills/`. With `--skills`, the agent gets all of them.
 - **Model:** set once in `pixi.toml` (`AGENT_MODEL`).
-- **Repeats:** every `agent-run` saves to a new folder, so running it again makes a new run.
+- **Repeats:** every run saves to a new folder, so running it again makes a new run.
