@@ -1,0 +1,5 @@
+Use PharmacoSets (PSets) from ORCESTRA. You may download them. Save downloaded PSets in data/procdata/psets/ and reuse any PSet already there.
+
+{qid}: {question}
+
+End your reply with one line:  {qid} | answer | method
