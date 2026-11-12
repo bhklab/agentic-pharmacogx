@@ -1,65 +1,39 @@
 # Agent setup
 
-The agent is **Biomni 0.0.8 (A1)**, running a local language model (**qwen3.8:27b**) through **Ollama**.
-
-```python
-from biomni.config import default_config
-from biomni.agent import A1
-
-model = "qwen3.8:27b"
-default_config.llm = model
-default_config.source = "Ollama"
-
-agent = A1(path="./data", llm=model, source="Ollama", expected_data_lake_files=[])
-agent.go("your question")
-```
-
-## Environment
-
-The project uses a single pixi environment. It contains:
-
-| Component | Version | Source |
-|---|---|---|
-| Python | 3.12 | conda-forge |
-| Biomni | 0.0.8 | PyPI |
-| R + PharmacoGx | 4.5 + 3.14 | bioconda (Linux only) |
-
-Exact versions of all packages are recorded in `pixi.lock`.
-
-R and PharmacoGx are installed by pixi on Linux only, because bioconda provides PharmacoGx 3.14 for Linux only. On macOS, use a local R installation with PharmacoGx 3.14.
+The agent is **Biomni** with a local model (**qwen3:8b**) run by **Ollama**. Everything is installed with [pixi](https://pixi.sh).
 
 ## Requirements
 
-- **[pixi](https://pixi.sh)**
-- **[Ollama](https://ollama.com)**, installed separately, with the model pulled: `ollama pull qwen3.8:27b`
-- A **GPU** large enough to run the model
+- **[pixi](https://pixi.sh)**: installs Python, Biomni and Ollama.
+- **R with PharmacoGx**: included by pixi on Linux; on macOS, install it yourself.
+- **About 6 GB of free disk space** for the model, and an internet connection for the first run.
+- A **GPU** is optional; it makes the agent much faster.
 
-## Usage
+## Install
 
 ```bash
-# 1. Get the code and install the environment
 git clone https://github.com/bhklab/agentic-pharmacogx.git
 cd agentic-pharmacogx
 pixi install
-
-# 2. Check the installation
-pixi run python -c "import biomni; print('Biomni OK')"
-ollama list                                   # should list qwen3.8:27b
-
-# 3. Place the 12 PSets in data/procdata/psets/
-
-# 4. Send one question to the agent
-pixi run agent-example                        # Q013 -> data/results/benchmark/agent/example/
-
-# 5. Send all questions
-pixi run agent-run --run run01                # -> data/results/benchmark/agent/run01/
 ```
 
-To update the code later, run `git pull`, then `pixi install`.
+## Run
+
+```bash
+pixi run agent-example Q014              # one question
+pixi run agent-example Q014 --skills     # one question, with our skills
+pixi run agent-run                       # all questions
+pixi run agent-run --skills              # all questions, with our skills
+```
+
+Replace `Q014` with any question ID (Q001–Q100). To see the prompt without running the agent, add `--dry-run`.
+
+The first run starts Ollama and downloads the model (about 5 GB) automatically. The agent downloads the data it needs from ORCESTRA itself.
+
+Answers are saved in `data/results/benchmark/agent/` and the agent's step-by-step log in `logs/benchmark/`.
 
 ## Notes
 
-- **Without pixi:** `pip install -r workflow/scripts/benchmark/requirements.txt` installs the same Python packages. R and PharmacoGx must then be installed separately.
-- **Another model:** set `model` in `agent_example.py` and `agent.py` to any model available in Ollama.
-- **Restarts and repeats:** an interrupted run is resumed with the same command, and completed questions are skipped. Use `--run run02`, `--run run03`, … for repeated runs.
-- **Settings:** Biomni defaults are used (temperature 0.7; 600 s timeout per code execution). Each run records its settings in `run_info.json`.
+- **Skills** are in `skills/`. With `--skills`, the agent gets all of them.
+- **Model:** set once in `pixi.toml` (`AGENT_MODEL`).
+- **Repeats:** every `agent-run` saves to a new folder, so running it again makes a new run.
