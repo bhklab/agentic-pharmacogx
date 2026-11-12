@@ -1,6 +1,7 @@
 # Agentic PharmacoGX
 
 **Contributors:** [Nasim Bondar-Sahebi](https://github.com/sogolsahebi), Nikta Feizi, Michael Tran, Omar Ibrahim
+
 **Contact:** [nasim.bondarsahebi@uhn.ca](mailto:nasim.bondarsahebi@uhn.ca)
 
 **Description:** Model-agnostic agent framework for reproducible pharmacogenomic analysis with PharmacoGx.
