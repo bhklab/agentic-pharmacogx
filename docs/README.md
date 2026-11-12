@@ -1,10 +1,20 @@
 # Agentic PharmacoGX
 
-**Authors:** [Nasim BondarSahebi](https://github.com/sogolsahebi), Nikta Feizi, Michael Tran, Omar Ibrahim
-
+**Contributors:** [Nasim Bondar-Sahebi](https://github.com/sogolsahebi), Nikta Feizi, Michael Tran, Omar Ibrahim
 **Contact:** [nasim.bondarsahebi@uhn.ca](mailto:nasim.bondarsahebi@uhn.ca)
 
 **Description:** Model-agnostic agent framework for reproducible pharmacogenomic analysis with PharmacoGx.
+
+## Overview
+
+Agentic PharmacoGx aims to enable AI agents to perform reproducible pharmacogenomic
+analyses through natural language. By connecting language-model agents to curated
+datasets and validated computational methods, the framework is designed to ensure that
+analytical results are computed, not inferred.
+
+The project builds on [PharmacoGx](https://bioconductor.org/packages/PharmacoGx), a
+Bioconductor R package for the analysis of large-scale pharmacogenomic data, and on
+curated PharmacoSets available through [ORCESTRA](https://orcestra.ca).
 
 --------------------------------------
 
