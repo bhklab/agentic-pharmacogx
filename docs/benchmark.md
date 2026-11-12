@@ -72,21 +72,23 @@ The 100 questions get harder in three tiers:
 
 ## Datasets
 
-The questions use 12 PSets from ORCESTRA. The table shows the version used for the manual answers and how many questions use each one.
+The questions use 12 PharmacoSets (PSets) from [ORCESTRA](https://orcestra.ca), a platform for curated pharmacogenomic datasets. The manual answers use the latest version of each PSet, listed below with a link to its dataset record.
 
-| PSet | ORCESTRA name | Questions |
-|---|---|---|
-| CCLE | `CCLE_2015` | 29 |
-| CTRPv2 | `CTRPv2_2015` | 18 |
-| GDSC2 | `GDSC_2020(v2-8.2)` | 15 |
-| gCSI | `gCSI_2019` | 8 |
-| NCI_ALMANAC | `NCI_ALMANAC` | 8 |
-| GDSC2_matrix | `GDSC²_Matrix` | 7 |
-| NCI60 | `NCI60_2021` | 3 |
-| HMCL | `HMCL` | 3 |
-| PRISM | `PRISM_2020` | 3 |
-| GDSC-SQUARE Anchor | `GDSC²_Anchor` | 2 |
-| GRAY | `GRAY_2017` | 1 |
-| GDSC1 | `GDSC_2020(v1-8.2)` | 1 |
+| PSet | ORCESTRA name | Dataset | Questions |
+|---|---|---|---|
+| CCLE | `CCLE_2019` | [10.5281/zenodo.18759113](https://doi.org/10.5281/zenodo.18759113) | 29 |
+| CTRPv2 | `CTRPv2.1_2016` | [10.5281/zenodo.21794049](https://doi.org/10.5281/zenodo.21794049) | 18 |
+| GDSC2 | `GDSC_2020(v2-8.2)` | [10.5281/zenodo.5787145](https://doi.org/10.5281/zenodo.5787145) | 15 |
+| gCSI | `gCSI_2019` | [10.5281/zenodo.7829857](https://doi.org/10.5281/zenodo.7829857) | 8 |
+| NCI_ALMANAC | `NCI_ALMANAC` | [10.5281/zenodo.23920676](https://doi.org/10.5281/zenodo.23920676) | 8 |
+| GDSC2_matrix | `GDSC²_Matrix` | [10.5281/zenodo.23921019](https://doi.org/10.5281/zenodo.23921019) | 7 |
+| NCI60 | `NCI60_2026` | [10.5281/zenodo.21043047](https://doi.org/10.5281/zenodo.21043047) | 3 |
+| HMCL | `HMCL` | [10.5281/zenodo.23920418](https://doi.org/10.5281/zenodo.23920418) | 3 |
+| PRISM | `PRISM_2020` | [10.5281/zenodo.7826864](https://doi.org/10.5281/zenodo.7826864) | 3 |
+| GDSC-SQUARE Anchor | `GDSC²_Anchor` | [10.5281/zenodo.23921232](https://doi.org/10.5281/zenodo.23921232) | 2 |
+| GRAY | `GRAY_2017` | [10.5281/zenodo.7826847](https://doi.org/10.5281/zenodo.7826847) | 1 |
+| GDSC1 | `GDSC_2020(v1-8.2)` | [10.5281/zenodo.7829915](https://doi.org/10.5281/zenodo.7829915) | 1 |
+
+To see all PSets on ORCESTRA from R: `PharmacoGx::availablePSets()`.
 
 A further 21 questions use all 12 PSets.
