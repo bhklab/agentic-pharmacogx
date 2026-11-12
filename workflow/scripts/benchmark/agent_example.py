@@ -25,7 +25,6 @@ from pathlib import Path
 
 from biomni.agent import A1
 from biomni.config import default_config
-from ollama_fix import fix_agent   # fixes empty replies + small context, see ollama_fix.py
 from live_log import run_with_live_log   # writes each step to the log right away
 
 
@@ -95,7 +94,6 @@ if model not in models_in_ollama:
     ollama.pull(model)
 
 agent = A1(path="./data", llm=model, source="Ollama", expected_data_lake_files=[])
-agent = fix_agent(agent, model)
 
 
 # Step 6: names and header for the saved files
