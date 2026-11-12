@@ -382,3 +382,6 @@ site/
 # models/
 # sandbox/
 # etc.
+
+# Project R library (PharmacoGx feat/mcp + CoreGx, installed for the benchmark)
+.Rlib/
