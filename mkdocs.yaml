@@ -22,6 +22,8 @@ nav:
   - Home: README.md
   - Usage: usage.md
   - Data Sources: data_sources.md
+  - Benchmark: benchmark.md
+  - Agent Setup: agent_setup.md
   - Developer Notes: devnotes.md
 
 theme: readthedocs
