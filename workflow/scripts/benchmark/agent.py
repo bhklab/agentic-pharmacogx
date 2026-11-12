@@ -1,12 +1,13 @@
-# TODO: this temaple to run all quetsions
 # Ask the agent ALL benchmark questions. To test one question first, use agent_example.py.
+# The agent uses the PSets already in data/procdata/psets/ (no downloading),
+# see metadata/benchmark_prompt_template_local.txt.
 #
 #   pixi run agent              without skills
 #   pixi run agent --skills     with all skills in skills/
 #
 # Saves (new folder each run, e.g. 2026-11-12_1430_qwen3-8b_skills):
 #   data/results/benchmark/agent/<run>/   Q001.txt ... (answers) + answers.csv (all answers)
-#   logs/benchmark/<run>/                 Q001.log ... (the agent's thinking)
+#   logs/benchmark/<run>/                 Q001.log ... (the agent's thinking, written live step by step)
 
 import csv
 import datetime
@@ -19,6 +20,8 @@ from pathlib import Path
 import ollama
 from biomni.agent import A1
 from biomni.config import default_config
+from ollama_fix import fix_agent   # fixes empty replies + small context, see ollama_fix.py
+from live_log import run_with_live_log   # writes each step to the log right away
 
 # settings
 use_skills = "--skills" in sys.argv
@@ -36,7 +39,7 @@ ollama.pull(model)
 
 # questions, prompt template, and skills
 questions = list(csv.DictReader(open("metadata/benchmark_questions.csv")))
-template = Path("metadata/benchmark_prompt_template.txt").read_text()
+template = Path("metadata/benchmark_prompt_template_local.txt").read_text()
 skills = ""
 if use_skills:
     for skill_file in sorted(Path("skills").glob("*/SKILL.md")):
@@ -57,14 +60,15 @@ for q in questions:
     print(qid, "...")
     prompt = skills + template.replace("{qid}", qid).replace("{question}", q["question"])
 
+    # every step goes into logs/<run>/Q001.log right away; errors are noted there and we go on
     try:
-        steps, answer = A1(path="./data", llm=model, source="Ollama", expected_data_lake_files=[]).go(prompt)
-    except Exception as error:   # if it crashes, note it and go on
-        steps, answer = [], f"ERROR: {error}"
+        agent = fix_agent(A1(path="./data", llm=model, source="Ollama", expected_data_lake_files=[]), model)
+        answer = run_with_live_log(agent, prompt, logs / f"{qid}.log", f"{qid}: {q['question']}\n")
+    except Exception as error:   # e.g. the agent could not even start
+        answer = f"ERROR: {error}"
 
-    # save the answer and the log
+    # save the answer
     (results / f"{qid}.txt").write_text(f"{qid}: {q['question']}\n\n{answer}")
-    (logs / f"{qid}.log").write_text(f"{qid}: {q['question']}\n\n" + "\n\n".join(map(str, steps)))
 
     # the agent's last line should be "Q014 | answer | method"
     line = [l for l in str(answer).replace("<solution>", "").splitlines() if l.strip().startswith(qid + " |")]
