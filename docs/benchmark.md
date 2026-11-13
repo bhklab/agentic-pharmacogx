@@ -21,7 +21,7 @@ We answer 100 questions twice, once **manually** with PharmacoGx (the reference)
 ## How it works
 
 1. **Manual answers:** answer each question with PharmacoGx, using the PSet versions listed below. This is done once.
-2. **Agent answers:** send each question to the agent in a new session. The agent finds and downloads the data it needs from ORCESTRA itself. Repeat as often as needed.
+2. **Agent answers:** send each question to the agent in a new session. The agent reuses cached PSets or downloads them from ORCESTRA/Zenodo. Zenodo may block automated requests; report blocked downloads separately from analysis failures. Repeat as often as needed.
 3. **Compare:** score each agent run against the manual answers.
 
 ## Files
@@ -45,7 +45,7 @@ data/                                  not in git
 
 ## Design
 
-- **Agent gets its own data:** the agent finds and downloads PSets from ORCESTRA itself; finding the right dataset is part of the task.
+- **Agent gets its own data:** the agent reuses cached PSets or downloads them from ORCESTRA/Zenodo; finding the right dataset is part of the task. GCP download links are being prepared by Matthew and are not yet configured.
 - **PharmacoGx only:** the manual answers use PharmacoGx functions, not custom code.
 - **Blind:** the agent never sees the manual answers.
 - **Independent:** each question runs in a new agent session.

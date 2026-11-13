@@ -1,4 +1,4 @@
-Use the PharmacoSets (PSets) already in data/procdata/psets/. Do not download or substitute other datasets. If a required PSet is missing or cannot be used, report that limitation. State the PSet filenames and analysis method used.
+Use PharmacoSets (PSets) from ORCESTRA. Reuse PSets already in data/procdata/psets/ or download them from the linked Zenodo records when needed. Save downloads in data/procdata/psets/. Zenodo may block automated requests. If a download is blocked, report the URL and error instead of repeatedly retrying or substituting a different PSet. State the PSet filenames and analysis method used.
 
 {qid}: {question}
 

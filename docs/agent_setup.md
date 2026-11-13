@@ -31,7 +31,7 @@ pixi run agent --skills                  # all questions, with our skills
 
 Replace `Q014` with any question ID (Q001–Q100). To see the prompt without running the agent, add `--dry-run`.
 
-The first run starts Ollama and downloads the model (about 17 GB) automatically. The single-question example can download PSets from ORCESTRA. The full-question run uses only the PSets already in `data/procdata/psets/`.
+The first run starts Ollama and downloads the model (about 17 GB) automatically. Both runners reuse cached PSets and support downloads from ORCESTRA/Zenodo. Zenodo can block automated downloads. Matthew is preparing GCP links, but they are not available in this repo yet. PSet downloading is on hold for handoff preparation; no datasets were downloaded as part of these changes.
 
 `bash workflow/scripts/benchmark/agent/run_one.sh Q014 --skills` runs one question against an existing Ollama service without restarting it or stopping other runs. It runs in the foreground. Set `OLLAMA_HOST` to use a different endpoint.
 
@@ -59,3 +59,11 @@ by `pixi.lock`; the two Gx revisions are pinned. The setup may compile dependenc
 A direct Pixi Git source needs a package build configuration. Pixi's R backend
 does not currently support Bioconductor dependencies, so a separate conda build
 recipe is not required for this setup approach.
+
+## Biomni tools and data
+
+Both runners enable Biomni’s standard tool retrieval and full default data-lake checks. `--skills` adds our PharmacoGx instructions on top of Biomni, not instead of its tools. Without `--skills`, Biomni’s tools and data are still available.
+
+The first actual agent run checks and downloads missing Biomni data-lake and benchmark resources. These are separate from the PSets. Allow storage and download time before timing benchmark questions. This repo has not downloaded or verified those resources yet. Some tools need additional software or service credentials beyond the Python package.
+
+Biomni uses `./data/biomni_data` by default. To use a shared disk, set `BIOMNI_PATH` to a writable parent directory with enough space; Biomni adds `biomni_data` beneath it. For Michael’s GPU2 project this is `~/bhklab/michael/agentic-pharmacogx/data`. PSet files still belong in the repo’s `data/procdata/psets/`. Do not start concurrent downloads into the same cache.

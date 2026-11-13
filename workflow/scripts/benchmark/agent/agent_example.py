@@ -93,7 +93,7 @@ if model not in models_in_ollama:
     print(f"\nModel {model} is not downloaded yet. Downloading it now (only once, can take a while) ...")
     ollama.pull(model)
 
-agent = A1(path="./data", llm=model, source="Ollama", expected_data_lake_files=[])
+agent = A1(path=default_config.path, llm=model, source="Ollama", use_tool_retriever=True)
 
 
 # Step 6: names and header for the saved files
