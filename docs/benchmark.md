@@ -58,6 +58,15 @@ A **run** is the agent answering all 100 questions once. Each run is saved in it
 - **repeat a run** to test reproducibility;
 - **change the model or agent** to test an improvement.
 
+## Skill loading
+
+- With `--skills`, the runners load every `skills/*/SKILL.md` in full before each question. They do not select skills based on the question.
+- Large skills increase the input size even when most of their instructions are unrelated to the task. This adds context and token overhead. The effect on runtime and answer quality still needs to be measured.
+- The installed Biomni package (`0.0.8`) does not automatically discover these portable skill folders. Its tool retriever is separate from our skill loading.
+- Upstream Biomni has a [Know-How Library](https://github.com/snap-stanford/Biomni#-know-how-library) that selects documents by name and description. This is not the same as reading our skill folders directly, and it is not enabled in the installed version.
+- Next step: test upstream know-how retrieval with a small adapter for our skill metadata instead of inserting every skill into the prompt. Check the custom-document registration path before use. Keep the existing skill files as the source of truth.
+- Record which skills were selected, their versions, token usage and runtime. Compare selective loading with full loading using the same questions and model. Keep detailed examples in supporting files that the agent can read when needed.
+
 ## Scoring
 
 An answer is correct if it matches the manual answer in **data, endpoint, method and result** (within tolerance). We report % agreement per tier and overall, with 95% confidence intervals, and how consistent the results are across runs.
