@@ -46,9 +46,13 @@
               <ul class="current">
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">Usage</a>
     <ul class="current">
-    <li class="toctree-l2"><a class="reference internal" href="#project-configuration">Project Configuration</a>
+    <li class="toctree-l2"><a class="reference internal" href="#install">Install</a>
     </li>
-    <li class="toctree-l2"><a class="reference internal" href="#running-your-analysis">Running Your Analysis</a>
+    <li class="toctree-l2"><a class="reference internal" href="#ask-the-agent">Ask the agent</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#manual-answers">Manual answers</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#where-things-are-saved">Where things are saved</a>
     </li>
     </ul>
                 </li>
@@ -94,12 +98,69 @@
             <div class="section" itemprop="articleBody">
               
                 <h1 id="usage-guide">Usage Guide</h1>
-<h2 id="project-configuration">Project Configuration</h2>
-<p>TODO:: discuss how to edit the configuration files in the <code>config/</code> directory to match your research parameters</p>
-<p>TODO:: discuss how to add your input data to the <code>data/rawdata/</code> directory and document it properly in the <code>docs/data_sources/</code> directory</p>
-<p>TODO:: discuss how to manage and organize your data sources effectively</p>
-<h2 id="running-your-analysis">Running Your Analysis</h2>
-<p>TODO:: discuss using pixi tasks to run the analysis</p>
+<h2 id="install">Install</h2>
+<p>Everything (Python, Biomni, Ollama, and R with PharmacoGx on Linux) is installed with <a href="https://pixi.sh">pixi</a>. pixi pins every version in <code>pixi.lock</code>, so each computer gets the same setup.</p>
+<pre><code class="language-bash">git clone https://github.com/bhklab/agentic-pharmacogx.git
+cd agentic-pharmacogx
+pixi install
+</code></pre>
+<p>On macOS, install R and PharmacoGx yourself (pixi provides them on Linux only).</p>
+<h2 id="ask-the-agent">Ask the agent</h2>
+<pre><code class="language-bash">pixi run agent-example Q014 --dry-run   # show the prompt only, no agent
+pixi run agent-example Q014             # one question, no skills
+pixi run agent-example Q014 --skills    # one question, with the skills in skills/
+pixi run agent                          # all 100 questions, no skills
+pixi run agent --skills                 # all 100 questions, with skills
+</code></pre>
+<p>Replace <code>Q014</code> with any question ID (Q001–Q100). The model is set by <code>AGENT_MODEL</code> in <code>pixi.toml</code>. Each full run saves to a new folder, so running it again adds a repeat.</p>
+<p>The agent needs a free GPU. If another model is using most of the GPU memory, it runs on the CPU and is very slow. Check with <code>nvidia-smi</code> before a long run. On the lab server, use <code>bash workflow/scripts/benchmark/agent/run_one.sh Q014 --skills</code>.</p>
+<p>More details: <a href="../agent_setup/">Agent Setup</a>.</p>
+<h2 id="manual-answers">Manual answers</h2>
+<p>The reference answers are computed with PharmacoGx in R:</p>
+<pre><code class="language-bash">Rscript workflow/scripts/benchmark/manual/manual.R        # all 100 questions
+Rscript workflow/scripts/benchmark/manual/manual_tier1.R  # or one tier at a time (tier1, tier2, tier3)
+</code></pre>
+<p>Each question has its own block with notes on what was done and any problem found. The notes at the end of <code>manual.R</code> list the problems and the questions they affect.</p>
+<h2 id="where-things-are-saved">Where things are saved</h2>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Questions</td>
+<td><code>metadata/benchmark_questions.csv</code></td>
+</tr>
+<tr>
+<td>Prompt template</td>
+<td><code>metadata/benchmark_prompt_template.txt</code></td>
+</tr>
+<tr>
+<td>Skills</td>
+<td><code>skills/</code></td>
+</tr>
+<tr>
+<td>PSets from ORCESTRA</td>
+<td><code>data/procdata/psets/</code></td>
+</tr>
+<tr>
+<td>Agent answers</td>
+<td><code>data/results/benchmark/agent/</code></td>
+</tr>
+<tr>
+<td>Agent step-by-step logs</td>
+<td><code>logs/benchmark/</code></td>
+</tr>
+<tr>
+<td>Manual answers</td>
+<td><code>data/results/benchmark/manual/answers.csv</code> (+ <code>figures/</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>How the benchmark is designed and scored: <a href="../benchmark/">Benchmark</a>.</p>
               
             </div>
           </div><footer>

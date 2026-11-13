@@ -121,18 +121,25 @@
 <h2 id="how-it-works">How it works</h2>
 <ol>
 <li><strong>Manual answers:</strong> answer each question with PharmacoGx, using the PSet versions listed below. This is done once.</li>
-<li><strong>Agent answers:</strong> send each question to the agent in a new session. The agent finds and downloads the data it needs from ORCESTRA itself. Repeat as often as needed.</li>
+<li><strong>Agent answers:</strong> send each question to the agent in a new session. The agent uses the PSets in <code>data/procdata/psets/</code>. Repeat as often as needed.</li>
 <li><strong>Compare:</strong> score each agent run against the manual answers.</li>
 </ol>
 <h2 id="files">Files</h2>
 <pre><code>metadata/
 ├── benchmark_questions.csv            the 100 questions
-└── benchmark_prompt_template.txt      prompt sent to the agent
+├── benchmark_prompt_template.txt      prompt for one test question (agent downloads PSets)
+└── benchmark_prompt_template_local.txt  prompt for the full run (agent uses PSets in data/procdata/psets/)
 
 workflow/
 ├── scripts/benchmark/
-│   ├── manual.R                       manual answers
-│   └── agent.py                       agent answers (see Agent setup)
+│   ├── manual/                        manual answers (PharmacoGx in R)
+│   │   ├── manual.R                   all 100 questions
+│   │   └── manual_tier1-3.R           one script per tier
+│   └── agent/                         agent answers (see Agent setup)
+│       ├── agent_example.py           one question
+│       ├── agent.py                   all questions
+│       ├── live_log.py                writes each step to the log
+│       └── run_one.sh, run_agent.sh   run on the lab server
 └── notebooks/benchmark/
     └── compare.Rmd                    comparison and figures
 
@@ -142,7 +149,7 @@ data/                                  not in git
 </code></pre>
 <h2 id="design">Design</h2>
 <ul>
-<li><strong>Agent gets its own data:</strong> the agent finds and downloads PSets from ORCESTRA itself; finding the right dataset is part of the task.</li>
+<li><strong>Same data as the manual answers:</strong> in the full run the agent uses the PSets already in <code>data/procdata/psets/</code> and does not download anything.</li>
 <li><strong>PharmacoGx only:</strong> the manual answers use PharmacoGx functions, not custom code.</li>
 <li><strong>Blind:</strong> the agent never sees the manual answers.</li>
 <li><strong>Independent:</strong> each question runs in a new agent session.</li>
