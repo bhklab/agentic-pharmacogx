@@ -1,0 +1,5 @@
+Use the PharmacoSets (PSets) already in data/procdata/psets/. Do not download or substitute other datasets. If a required PSet is missing or cannot be used, report that limitation. State the PSet filenames and analysis method used.
+
+{qid}: {question}
+
+End your reply with one line:  {qid} | answer | method

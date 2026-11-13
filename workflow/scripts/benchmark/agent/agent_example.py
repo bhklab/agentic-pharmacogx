@@ -64,7 +64,7 @@ if "--dry-run" in sys.argv:
 
 
 # Step 5: start the agent (Biomni with our local model in Ollama)
-model = os.environ.get("AGENT_MODEL", "qwen3:8b")   # set in pixi.toml
+model = os.environ.get("AGENT_MODEL", "qwen3.8:27b")   # set in pixi.toml
 default_config.llm = model
 default_config.source = "Ollama"
 

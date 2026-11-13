@@ -23,8 +23,9 @@ env.LOGS = "${PIXI_PROJECT_ROOT}/logs"
 env.RAWDATA = "${PIXI_PROJECT_ROOT}/data/rawdata"
 env.PROCDATA = "${PIXI_PROJECT_ROOT}/data/procdata"
 env.RESULTS = "${PIXI_PROJECT_ROOT}/data/results"
+env.R_LIBS_USER = "${PIXI_PROJECT_ROOT}/.pixi/r-library"
 env.SCRIPTS = "${PIXI_PROJECT_ROOT}/workflow/scripts"
-env.AGENT_MODEL = "qwen3:8b"   # Ollama model used by the agent 
+env.AGENT_MODEL = "qwen3.8:27b"   # Ollama model used by the agent
 
 [dependencies]
 python = "3.12.*"   # pinned: pandas 2.3.3 (needed by Biomni) has no build for Python 3.15
@@ -32,7 +33,7 @@ ipython = "*"
 ipykernel = "*"
 jupyterlab = "*"
 pip = "*"
-ollama = "*"       
+ollama = "*"
 
 [pypi-dependencies]
 damply = ">=0.10.0, <0.11"
@@ -45,17 +46,23 @@ numpy = "==2.1.0"
 requests = "==2.34.2"
 tqdm = "==4.70.1"
 
-# R + PharmacoGx from pixi on Linux only (bioconda has PharmacoGx 3.14 for Linux only).
-# On macOS, use your own R installation with PharmacoGx.
+# Linux R runtime and binary dependencies. The two Gx packages are installed
+# from pinned GitHub commits by `pixi run setup`.
 [target.linux-64.dependencies]
 r-base = "4.5.*"
-bioconductor-pharmacogx = "3.14.*"
+r-remotes = "*"
+r-biocmanager = "*"
+make = "*"
+cxx-compiler = "*"
+pkg-config = "*"
 r-ggplot2 = "*"
 
 [tasks]
+setup = { cmd = "Rscript workflow/scripts/setup/pharmacogx.R", description = "Install pinned PharmacoGx/CoreGx into the project R library" }
+verify-pgx = { cmd = "Rscript workflow/scripts/setup/pharmacogx.R --check", description = "Verify the pinned R packages and required APIs" }
 example_script = {cmd="python $SCRIPTS/example_script.py", description="Run an example script"}
-agent-example = { cmd = "python workflow/scripts/benchmark/agent_example.py", description = "Test the agent on one question, e.g. pixi run agent-example Q014" }
-agent = { cmd = "python workflow/scripts/benchmark/agent.py", description = "Ask the agent all benchmark questions (one run), e.g. pixi run agent --skills" }
+agent-example = { depends-on = ["verify-pgx"], cmd = "python workflow/scripts/benchmark/agent/agent_example.py", description = "Test the agent on one question, e.g. pixi run agent-example Q014" }
+agent = { depends-on = ["verify-pgx"], cmd = "python workflow/scripts/benchmark/agent/agent.py", description = "Ask the agent all benchmark questions (one run), e.g. pixi run agent --skills" }
 
 ############################################## QUALITY ###############################################
 # Quality includes linting, type checking, and formatting

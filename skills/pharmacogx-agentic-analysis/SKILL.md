@@ -33,6 +33,9 @@ Skill when available. For remote measurement/catalog discovery, use
 `orcestra-discovery`. Neither is required to analyze an already verified local
 PSet. Do not expose evaluator scripts or expected results to benchmark agents.
 
+For dataset-specific handling, also read the companion
+[PharmacoGx data skill](../analyze-pharmacogx-data/SKILL.md).
+
 ## Workflow contract
 
 1. Identify the requested treatment, sample or disease context, response

@@ -5,6 +5,14 @@ description: Install and verify PharmacoGx from BHKLab's feat/mcp GitHub branch 
 
 # PharmacoGx MCP-branch installation
 
+## This repository
+
+For this repository, use `pixi run setup` followed by `pixi run verify-pgx`.
+The current package pins and checks live in
+`workflow/scripts/setup/pharmacogx.R`; see `docs/agent_setup.md`.
+Do not install packages during a benchmark run. The older hosted reproduction
+recipe below is a separate historical environment, not this repository setup.
+
 Prepare a verified R environment for the companion pharmacogenomic skills.
 Prefer the user's hosted Biomni R workspace when that is their chosen host;
 this workflow does not require installing software on their workstation.

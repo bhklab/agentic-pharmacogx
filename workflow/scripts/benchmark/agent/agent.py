@@ -24,7 +24,7 @@ from live_log import run_with_live_log   # writes each step to the log right awa
 
 # settings
 use_skills = "--skills" in sys.argv
-model = os.environ.get("AGENT_MODEL", "qwen3:8b")   # set in pixi.toml
+model = os.environ.get("AGENT_MODEL", "qwen3.8:27b")   # set in pixi.toml
 default_config.llm = model
 default_config.source = "Ollama"
 
