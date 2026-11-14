@@ -54,8 +54,8 @@ r-ggplot2 = "*"
 
 [tasks]
 example_script = {cmd="python $SCRIPTS/example_script.py", description="Run an example script"}
-agent-example = { cmd = "python workflow/scripts/benchmark/agent_example.py", description = "Test the agent on one question, e.g. pixi run agent-example Q014" }
-agent = { cmd = "python workflow/scripts/benchmark/agent.py", description = "Ask the agent all benchmark questions (one run), e.g. pixi run agent --skills" }
+agent-example = { cmd = "python workflow/scripts/benchmark/agent/agent_example.py", description = "Test the agent on one question, e.g. pixi run agent-example Q014" }
+agent = { cmd = "python workflow/scripts/benchmark/agent/agent.py", description = "Ask the agent all benchmark questions (one run), e.g. pixi run agent --skills" }
 
 ############################################## QUALITY ###############################################
 # Quality includes linting, type checking, and formatting
