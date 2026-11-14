@@ -21,11 +21,16 @@ jobs:
                   environments: docs
                   activate-environment: true
 
-            - name: Configure Git user
-              run: |
-                  git config --local user.email "github-actions[bot]@users.noreply.github.com"
-                  git config --local user.name "github-actions[bot]"
+            # The main repo is private, so the website is published from a separate public repo
+            # (bhklab/agentic-pharmacogx-docs). DOCS_DEPLOY_KEY = private half of a deploy key
+            # whose public half is added (with write access) to that repo.
+            - name: Build documentation
+              run: mkdocs build -f mkdocs.yaml
 
-            - name: Deploy Documentation Using Mike and Released Version
-              run: |
-                  mkdocs gh-deploy --force
+            - name: Publish to the public docs repo
+              uses: peaceiris/actions-gh-pages@v4
+              with:
+                  deploy_key: ${{ secrets.DOCS_DEPLOY_KEY }}
+                  external_repository: bhklab/agentic-pharmacogx-docs
+                  publish_branch: gh-pages
+                  publish_dir: ./site
